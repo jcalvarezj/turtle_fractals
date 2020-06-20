@@ -1,6 +1,5 @@
 """
-This is a simple example of recursive fractal drawing using the turtle graphics
-library 
+This is a simple example of recursive fractal drawing using turtle graphics
 """
 import turtle
 from enum import Enum
@@ -43,15 +42,8 @@ def draw_fractal(fract_type):
 
 def draw_concentric_circles(radius, decrease_ratio):
     if (radius > 5):
-        my_turtle.penup()
-        my_turtle.right(90)
-        my_turtle.forward(radius)
-        my_turtle.left(90)
-        my_turtle.pendown()
-
-        my_turtle.fillcolor((randint(0, 255), randint(0, 255), randint(0, 255)))
-        my_turtle.begin_fill()
-        my_turtle.circle(radius)
+        color = (randint(0, 255), randint(0, 255), randint(0, 255))
+        draw_circle(WIDTH/2, HEIGHT/2, radius, color)
         my_turtle.end_fill()
 
         my_turtle.penup()
@@ -73,14 +65,14 @@ def draw_circle(x, y, radius, colors):
     my_turtle.end_fill()
 
 
-def draw_binary_circles(x, y, radius, level_colors):
+def draw_binary_circles(x, y, radius, level_color):
     if (radius > 10):            
-            draw_circle(x, y, radius, level_colors)
+            draw_circle(x, y, radius, level_color)
 
-            new_colors = (randint(0, 255), randint(0, 255), randint(0, 255))
+            new_color = (randint(0, 255), randint(0, 255), randint(0, 255))
 
-            draw_binary_circles(x - radius / 2, y, radius / 2, new_colors)
-            draw_binary_circles(x + radius / 2, y, radius / 2, new_colors)
+            draw_binary_circles(x - radius / 2, y, radius / 2, new_color)
+            draw_binary_circles(x + radius / 2, y, radius / 2, new_color)
 
 
 if __name__ == "__main__":
