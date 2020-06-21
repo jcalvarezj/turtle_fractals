@@ -28,7 +28,6 @@ class FractalType(Enum):
     SNOWFLAKE_T = 4
     SNOWFLAKE_S = 5
     TREE = 6
-    SIERPINSKI = 7
 
 
 def initial_setup():
@@ -176,7 +175,7 @@ def draw_koch_triangular_snowflake(x, y, length, level):
         "i-1 level" Koch's curve, turn 120° to the right, "i-1 level" Koch's
         curve, turn 120° to the right, "i-1 level" Koch's curve
     
-    The previous can be formally defined as a Lyndenmayer system as:    
+    The previous can be formally defined as a Lyndenmayer system as:
     
         F = K-K-K
 
@@ -205,7 +204,7 @@ def draw_koch_square_snowflake(x, y, length, level):
         "i-1 level" Koch's curve, turn 120° to the right, "i-1 level" Koch's
         curve, turn 120° to the right, "i-1 level" Koch's curve
     
-    The previous can be formally defined as a Lyndenmayer system as:    
+    The previous can be formally defined as a Lyndenmayer system as:
     
         F = K-K-K-K
 
@@ -228,6 +227,15 @@ def draw_koch_square_snowflake(x, y, length, level):
 
 
 def draw_tree(x, y, length, level, color, angle = 90, decrease_ratio = 0.55):
+    """
+    Draws a binary tree fractal.
+    This fractal's minimum problem is a simple line, and the higher order
+    problem is defined as follows:
+    
+        Draw line, turn left 40° from the line's direction and draw a subtree,
+        and at the same level turn right 40° from the line's direction, and
+        draw another subtree
+    """
     if (level < 1):
         my_turtle.setheading(angle)
         draw_line(x, y, length, color)
