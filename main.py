@@ -12,8 +12,9 @@ MENU = [
     (1) Concentric circles
     (2) Binary lateral circles
     (3) Koch's curve
-    (4) Koch's snowflake
-    (5) Koch's thing''',
+    (4) Koch's triangular snowflake
+    (5) Koch's square snowflake
+    (6) Tree''',
     'What level of the chosen fractal would you like see? (min: 0, max: 10)'
 ]
 
@@ -24,9 +25,10 @@ class FractalType(Enum):
     CCIRCLES = 1
     BCIRCLES = 2
     KOCH = 3
-    SNOWFLAKE = 4
-    TEETH = 5
-    SIERPINSKI = 6
+    SNOWFLAKE_T = 4
+    SNOWFLAKE_S = 5
+    TREE = 6
+    SIERPINSKI = 7
 
 
 def initial_setup():
@@ -61,10 +63,12 @@ def draw_fractal(fract_type, level):
         draw_binary_circles(WIDTH/2, HEIGHT/2, 400, color, level)
     elif fract_type == FractalType.KOCH.value:
         draw_koch_curve(WIDTH/2 - 600, HEIGHT/2 - 150, 1200, level, color)
-    elif fract_type == FractalType.SNOWFLAKE.value:
+    elif fract_type == FractalType.SNOWFLAKE_T.value:
         draw_koch_triangular_snowflake(WIDTH/2 - 250, HEIGHT/2 + 100, 1200, level)
-    else:
+    elif fract_type == FractalType.SNOWFLAKE_S.value:
         draw_koch_square_snowflake(WIDTH/2 - 250, HEIGHT/2 + 200, 1200, level)
+    else:
+        draw_tree(WIDTH/2, HEIGHT/2 - 400, 400, level, color)
 
 
 def draw_circle(x, y, radius, color):
@@ -116,7 +120,7 @@ def draw_binary_circles(x, y, radius, level_color, level):
         draw_binary_circles(x + radius / 2, y, radius / 2, new_color, level - 1)
     
 
-def draw_line(x, y, length, color):
+def draw_line(x, y, length, color = (0, 0, 0)):
     """
     Draws a simple line starting from (x, y), with the entered length and
     color, that goes forward according to the turtle's head angle
@@ -162,7 +166,7 @@ def draw_koch_curve(x, y, length, level, level_color = (0, 0, 0)):
         return draw_koch_curve(pos3[0], pos3[1], length/3, level - 1, color1)
 
 
-def draw_koch_triangular_snowflake(x, y, length, level, level_color = (0, 0, 0)):
+def draw_koch_triangular_snowflake(x, y, length, level):
     """
     Draws a Koch's triangular snowflake fractal and returns the last position
     of a subproblem drawing.
@@ -180,7 +184,7 @@ def draw_koch_triangular_snowflake(x, y, length, level, level_color = (0, 0, 0))
     degrees to the right
     """
     if (level < 1):
-        return draw_line(x, y, length, level_color)
+        return draw_line(x, y, length)
     else:
         pos1 = draw_koch_curve(x, y, length/3, level - 1)
         my_turtle.right(120)
@@ -191,7 +195,7 @@ def draw_koch_triangular_snowflake(x, y, length, level, level_color = (0, 0, 0))
         return draw_koch_curve(pos2[0], pos2[1], length/3, level - 1)
 
 
-def draw_koch_square_snowflake(x, y, length, level, level_color = (0, 0, 0)):
+def draw_koch_square_snowflake(x, y, length, level):
     """
     Draws a Koch's square snowflake fractal and returns the last position of a
     subproblem drawing.
@@ -209,7 +213,7 @@ def draw_koch_square_snowflake(x, y, length, level, level_color = (0, 0, 0)):
     turning 90 degrees to the right
     """    
     if (level < 1):
-        return draw_line(x, y, length, level_color)
+        return draw_line(x, y, length)
     else:
         pos1 = draw_koch_curve(x, y, length/3, level - 1)
         my_turtle.right(90)
@@ -221,6 +225,29 @@ def draw_koch_square_snowflake(x, y, length, level, level_color = (0, 0, 0)):
         my_turtle.right(90)
 
         return draw_koch_curve(pos3[0], pos3[1], length/3, level - 1)
+
+
+def draw_tree(x, y, length, level, color, angle = 90):
+    if (level < 1):
+        my_turtle.setheading(angle)
+        draw_line(x, y, length, color)
+    else:
+        my_turtle.setheading(angle)
+        pos1 = draw_line(x, y, length, color)
+
+        new_color = get_random_rgb()        
+
+        my_turtle.left(40)
+        current_angle = my_turtle.heading()
+        draw_tree(pos1[0], pos1[1], length * 0.45, level - 1, new_color, current_angle)
+
+        my_turtle.setheading(angle)
+
+        my_turtle.right(40)
+        current_angle = my_turtle.heading()
+        draw_tree(pos1[0], pos1[1], length * 0.45, level - 1, new_color, current_angle)
+        
+        my_turtle.penup()
 
 
 def validate_option(option, min_value, max_value):
@@ -253,7 +280,7 @@ def main_cli():
 
     fractal_option = int(prompt_user(0))
 
-    if (validate_option(fractal_option, 1, 5)):
+    if (validate_option(fractal_option, 1, 6)):
         level_option = int(prompt_user(1))
 
         if (validate_option(level_option, 0, 10)):            
