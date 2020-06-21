@@ -8,4 +8,4 @@ Open a terminal on the project's root and either execute `python main.py` or `py
 
 ## Preview
 
-![Binary Lateral Circles](https://i.imgur.com/uBvCwDu.png)
+![Fractals](https://i.imgur.com/NsmnIQs.png)
