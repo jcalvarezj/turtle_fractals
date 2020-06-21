@@ -11,7 +11,8 @@ MENU = [
     '''Please enter the desired option:
     (1) Concentric circles
     (2) Binary lateral circles
-    (3) Koch curve''',
+    (3) Koch's curve
+    (4) Koch's snowflake''',
     'What level of the chosen fractal would you like see? (min: 0, max: 10)'
 ]
 
@@ -22,8 +23,9 @@ class FractalType(Enum):
     CCIRCLES = 1
     BCIRCLES = 2
     KOCH = 3
-    TEETH = 4
-    SIERPINSKI = 5
+    SNOWFLAKE = 4
+    TEETH = 5
+    SIERPINSKI = 6
 
 
 def initial_setup():
@@ -59,7 +61,7 @@ def draw_fractal(fract_type, level):
     elif fract_type == FractalType.KOCH.value:
         draw_koch_curve(WIDTH/2 - 400, HEIGHT/2, 800, color, level)
     else:
-        pass
+        draw_koch_snowflake(WIDTH/2 - 400, HEIGHT/2, 800, color, level)
 
 
 def draw_circle(x, y, radius, color):
@@ -115,6 +117,8 @@ def draw_line(x, y, length, color):
     """
     Draws a simple line starting from (x, y), with the entered length and
     color, that goes forward according to the turtle's head angle
+
+    Returns the final position of the turtle after moving
     """
     my_turtle.setposition(x, y)
     my_turtle.pencolor(color)
@@ -125,17 +129,18 @@ def draw_line(x, y, length, color):
 
 def draw_koch_curve(x, y, length, level_color, level):
     """
-    Draws a Koch's curve fractal.
+    Draws a Koch's curve fractal and returns the last position of a subproblem
+    drawing.
     This fractal's minimum problem is a simple line, and the higher order
     problem is defined as follows:
     "i-1 level" drawing, turn 60° to the left, "i-1 level" drawing, turn 120°
-    to the right, "i-1 level drawing", turn 60° to the left, "i-2 level" drawing
+    to the right, "i-1 level drawing", turn 60° to the left, "i-1 level" drawing
     
     The previous can be formally defined as a Lyndenmayer system as:    
     F = K+K--K+K
 
-    If F is the general problem, K is a recursive subproblem of F, + is turn 60
-    degrees to the left, and - is turn 60 degrees to the right
+    For F as the general problem, K as a recursive subproblem of F, + as
+    turning 60 degrees to the left, and - as turning 60 degrees to the right
     """
     if (level < 1):
         return draw_line(x, y, length, level_color)
@@ -152,6 +157,35 @@ def draw_koch_curve(x, y, length, level_color, level):
         my_turtle.left(60)
 
         return draw_koch_curve(pos3[0], pos3[1], length/3, color1, level - 1)
+
+
+def draw_koch_snowflake(x, y, length, level_color, level):
+    """
+    Draws a Koch's snowflake fractal and returns the last position of a subproblem
+    drawing.
+    This fractal's minimum problem is a simple line, and the higher order
+    problem is defined as follows:
+    "i-1 level" drawing, turn 120° to the right, "i-1 level" drawing, turn 120°
+    to the right, "i-1 level drawing"
+    
+    The previous can be formally defined as a Lyndenmayer system as:    
+    F = K--K--K
+
+    For F as the general problem, K as a recursive subproblem of F, and - as
+    turning 60 degrees to the right
+    """
+    if (level < 1):
+        return draw_line(x, y, length, level_color)
+    else:
+        color1 = get_random_rgb()
+        pos1 = draw_koch_curve(x, y, length/3, color1, level - 1)
+        my_turtle.right(120)
+
+        color2 = get_random_rgb()
+        pos2 = draw_koch_curve(pos1[0], pos1[1], length/3, color2, level - 1)
+        my_turtle.right(120)
+
+        return draw_koch_curve(pos2[0], pos2[1], length/3, color1, level - 1)
 
 
 def validate_option(option, min_value, max_value):
@@ -184,7 +218,7 @@ def main_cli():
 
     fractal_option = int(prompt_user(0))
 
-    if (validate_option(fractal_option, 1, 3)):
+    if (validate_option(fractal_option, 1, 4)):
         level_option = int(prompt_user(1))
 
         if (validate_option(level_option, 0, 10)):            
@@ -201,13 +235,6 @@ def main_cli():
 
 
 if __name__ == "__main__":
-    # my_turtle = turtle.Turtle()                            
-    # window = turtle.Screen()
-    # initial_setup()
-
-    # draw_fractal(1, 5)
-
-    # window.mainloop()
     try:
         main_cli()
     except ValueError as e:
