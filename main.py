@@ -134,7 +134,7 @@ def draw_koch_curve(x, y, length, level_color, level):
     This fractal's minimum problem is a simple line, and the higher order
     problem is defined as follows:
     "i-1 level" drawing, turn 60° to the left, "i-1 level" drawing, turn 120°
-    to the right, "i-1 level drawing", turn 60° to the left, "i-1 level" drawing
+    to the right, "i-1" level drawing, turn 60° to the left, "i-1 level" drawing
     
     The previous can be formally defined as a Lyndenmayer system as:    
     F = K+K--K+K
@@ -165,14 +165,14 @@ def draw_koch_snowflake(x, y, length, level_color, level):
     drawing.
     This fractal's minimum problem is a simple line, and the higher order
     problem is defined as follows:
-    "i-1 level" drawing, turn 120° to the right, "i-1 level" drawing, turn 120°
-    to the right, "i-1 level drawing"
+    "i-1 level" Koch's curve, turn 120° to the right, "i-1 level" Koch's curve,
+    turn 120° to the right, "i-1 level" Koch's curve
     
     The previous can be formally defined as a Lyndenmayer system as:    
     F = K--K--K
 
-    For F as the general problem, K as a recursive subproblem of F, and - as
-    turning 60 degrees to the right
+    For F as the general problem, K as a Koch curve, and - as turning 60
+    degrees to the right
     """
     if (level < 1):
         return draw_line(x, y, length, level_color)
