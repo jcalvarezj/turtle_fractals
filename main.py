@@ -12,7 +12,8 @@ MENU = [
     (1) Concentric circles
     (2) Binary lateral circles
     (3) Koch's curve
-    (4) Koch's snowflake''',
+    (4) Koch's snowflake
+    (5) Koch's thing''',
     'What level of the chosen fractal would you like see? (min: 0, max: 10)'
 ]
 
@@ -60,8 +61,10 @@ def draw_fractal(fract_type, level):
         draw_binary_circles(WIDTH/2, HEIGHT/2, 400, color, level)
     elif fract_type == FractalType.KOCH.value:
         draw_koch_curve(WIDTH/2 - 600, HEIGHT/2 - 150, 1200, level, color)
+    elif fract_type == FractalType.SNOWFLAKE.value:
+        draw_koch_triangular_snowflake(WIDTH/2 - 250, HEIGHT/2 + 100, 1200, level)
     else:
-        draw_koch_snowflake(WIDTH/2 - 250, HEIGHT/2 + 100, 1200, level)
+        draw_koch_square_snowflake(WIDTH/2 - 250, HEIGHT/2 + 200, 1200, level)
 
 
 def draw_circle(x, y, radius, color):
@@ -159,19 +162,21 @@ def draw_koch_curve(x, y, length, level, level_color = (0, 0, 0)):
         return draw_koch_curve(pos3[0], pos3[1], length/3, level - 1, color1)
 
 
-def draw_koch_snowflake(x, y, length, level, level_color = (0, 0, 0)):
+def draw_koch_triangular_snowflake(x, y, length, level, level_color = (0, 0, 0)):
     """
-    Draws a Koch's snowflake fractal and returns the last position of a subproblem
-    drawing.
-    This fractal's minimum problem is a simple line, and the higher order
-    problem is defined as follows:
-    "i-1 level" Koch's curve, turn 120° to the right, "i-1 level" Koch's curve,
-    turn 120° to the right, "i-1 level" Koch's curve
+    Draws a Koch's triangular snowflake fractal and returns the last position
+    of a subproblem drawing.
+    This fractal's minimum problem is a simple equilateral triangle, and the
+    higher order problem is defined as follows:
+    
+        "i-1 level" Koch's curve, turn 120° to the right, "i-1 level" Koch's
+        curve, turn 120° to the right, "i-1 level" Koch's curve
     
     The previous can be formally defined as a Lyndenmayer system as:    
-    F = K--K--K
+    
+        F = K-K-K
 
-    For F as the general problem, K as a Koch curve, and - as turning 60
+    For F as the general problem, K as a Koch curve, and - as turning 120
     degrees to the right
     """
     if (level < 1):
@@ -184,6 +189,38 @@ def draw_koch_snowflake(x, y, length, level, level_color = (0, 0, 0)):
         my_turtle.right(120)
 
         return draw_koch_curve(pos2[0], pos2[1], length/3, level - 1)
+
+
+def draw_koch_square_snowflake(x, y, length, level, level_color = (0, 0, 0)):
+    """
+    Draws a Koch's square snowflake fractal and returns the last position of a
+    subproblem drawing.
+    This fractal's minimum problem is a simple square, and the higher order
+    problem is defined as follows:
+    
+        "i-1 level" Koch's curve, turn 120° to the right, "i-1 level" Koch's
+        curve, turn 120° to the right, "i-1 level" Koch's curve
+    
+    The previous can be formally defined as a Lyndenmayer system as:    
+    
+        F = K-K-K-K
+
+    For F as the general problem, K as a "i-1 level" Koch curve, and - as 
+    turning 90 degrees to the right
+    """    
+    if (level < 1):
+        return draw_line(x, y, length, level_color)
+    else:
+        pos1 = draw_koch_curve(x, y, length/3, level - 1)
+        my_turtle.right(90)
+
+        pos2 = draw_koch_curve(pos1[0], pos1[1], length/3, level - 1)
+        my_turtle.right(90)
+
+        pos3 = draw_koch_curve(pos2[0], pos2[1], length/3, level - 1)
+        my_turtle.right(90)
+
+        return draw_koch_curve(pos3[0], pos3[1], length/3, level - 1)
 
 
 def validate_option(option, min_value, max_value):
@@ -216,7 +253,7 @@ def main_cli():
 
     fractal_option = int(prompt_user(0))
 
-    if (validate_option(fractal_option, 1, 4)):
+    if (validate_option(fractal_option, 1, 5)):
         level_option = int(prompt_user(1))
 
         if (validate_option(level_option, 0, 10)):            
