@@ -227,7 +227,7 @@ def draw_koch_square_snowflake(x, y, length, level):
         return draw_koch_curve(pos3[0], pos3[1], length/3, level - 1)
 
 
-def draw_tree(x, y, length, level, color, angle = 90):
+def draw_tree(x, y, length, level, color, angle = 90, decrease_ratio = 0.55):
     if (level < 1):
         my_turtle.setheading(angle)
         draw_line(x, y, length, color)
@@ -239,13 +239,15 @@ def draw_tree(x, y, length, level, color, angle = 90):
 
         my_turtle.left(40)
         current_angle = my_turtle.heading()
-        draw_tree(pos1[0], pos1[1], length * 0.45, level - 1, new_color, current_angle)
+        draw_tree(pos1[0], pos1[1], length * decrease_ratio, level - 1,
+                  new_color, current_angle, decrease_ratio)
 
         my_turtle.setheading(angle)
 
         my_turtle.right(40)
         current_angle = my_turtle.heading()
-        draw_tree(pos1[0], pos1[1], length * 0.45, level - 1, new_color, current_angle)
+        draw_tree(pos1[0], pos1[1], length * decrease_ratio, level - 1,
+                  new_color, current_angle, decrease_ratio)
         
         my_turtle.penup()
 
