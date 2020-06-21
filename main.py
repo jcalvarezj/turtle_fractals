@@ -59,9 +59,9 @@ def draw_fractal(fract_type, level):
     elif fract_type == FractalType.BCIRCLES.value:        
         draw_binary_circles(WIDTH/2, HEIGHT/2, 400, color, level)
     elif fract_type == FractalType.KOCH.value:
-        draw_koch_curve(WIDTH/2 - 400, HEIGHT/2, 800, color, level)
+        draw_koch_curve(WIDTH/2 - 600, HEIGHT/2 - 150, 1200, level, color)
     else:
-        draw_koch_snowflake(WIDTH/2 - 400, HEIGHT/2, 800, color, level)
+        draw_koch_snowflake(WIDTH/2 - 250, HEIGHT/2 + 100, 1200, level)
 
 
 def draw_circle(x, y, radius, color):
@@ -127,7 +127,7 @@ def draw_line(x, y, length, color):
     return my_turtle.pos()
 
 
-def draw_koch_curve(x, y, length, level_color, level):
+def draw_koch_curve(x, y, length, level, level_color = (0, 0, 0)):
     """
     Draws a Koch's curve fractal and returns the last position of a subproblem
     drawing.
@@ -146,20 +146,20 @@ def draw_koch_curve(x, y, length, level_color, level):
         return draw_line(x, y, length, level_color)
     else:
         color1 = get_random_rgb()
-        pos1 = draw_koch_curve(x, y, length/3, color1, level - 1)
+        pos1 = draw_koch_curve(x, y, length/3, level - 1, color1)
         my_turtle.left(60)
 
         color2 = get_random_rgb()
-        pos2 = draw_koch_curve(pos1[0], pos1[1], length/3, color2, level - 1)
+        pos2 = draw_koch_curve(pos1[0], pos1[1], length/3, level - 1, color2)
         my_turtle.right(120)
 
-        pos3 = draw_koch_curve(pos2[0], pos2[1], length/3, color2, level - 1)
+        pos3 = draw_koch_curve(pos2[0], pos2[1], length/3, level - 1, color2)
         my_turtle.left(60)
 
-        return draw_koch_curve(pos3[0], pos3[1], length/3, color1, level - 1)
+        return draw_koch_curve(pos3[0], pos3[1], length/3, level - 1, color1)
 
 
-def draw_koch_snowflake(x, y, length, level_color, level):
+def draw_koch_snowflake(x, y, length, level, level_color = (0, 0, 0)):
     """
     Draws a Koch's snowflake fractal and returns the last position of a subproblem
     drawing.
@@ -177,15 +177,13 @@ def draw_koch_snowflake(x, y, length, level_color, level):
     if (level < 1):
         return draw_line(x, y, length, level_color)
     else:
-        color1 = get_random_rgb()
-        pos1 = draw_koch_curve(x, y, length/3, color1, level - 1)
+        pos1 = draw_koch_curve(x, y, length/3, level - 1)
         my_turtle.right(120)
 
-        color2 = get_random_rgb()
-        pos2 = draw_koch_curve(pos1[0], pos1[1], length/3, color2, level - 1)
+        pos2 = draw_koch_curve(pos1[0], pos1[1], length/3, level - 1)
         my_turtle.right(120)
 
-        return draw_koch_curve(pos2[0], pos2[1], length/3, color1, level - 1)
+        return draw_koch_curve(pos2[0], pos2[1], length/3, level - 1)
 
 
 def validate_option(option, min_value, max_value):
